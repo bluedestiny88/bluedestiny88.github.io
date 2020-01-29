@@ -124,11 +124,11 @@ Guy.prototype.draw = function () {
 }
 
 
-AM.queueDownload("./img/todd.png");
-//AM.queueDownload("./img/guy.jpg");
+AM.queueDownload("./img/Todd.png");
+AM.queueDownload("./img/guy.jpg");
 AM.queueDownload("./img/scottpilgrim.png");
-//AM.queueDownload("./img/runningcat.png");
-//AM.queueDownload("./img/background.jpg");
+AM.queueDownload("./img/runningcat.png");
+AM.queueDownload("./img/background.jpg");
 
 AM.downloadAll(function () {
     var canvas = document.getElementById("gameWorld");
