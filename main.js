@@ -125,10 +125,10 @@ Guy.prototype.draw = function () {
 
 
 AM.queueDownload("./img/Todd.png");
-AM.queueDownload("./img/guy.jpg");
-AM.queueDownload("./img/scottpilgrim.png");
-AM.queueDownload("./img/runningcat.png");
-AM.queueDownload("./img/background.jpg");
+//AM.queueDownload("./img/guy.jpg");
+AM.queueDownload("./img/ScottPilgrim.png");
+//AM.queueDownload("./img/runningcat.png");
+//AM.queueDownload("./img/background.jpg");
 
 AM.downloadAll(function () {
     var canvas = document.getElementById("gameWorld");
