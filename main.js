@@ -62,15 +62,16 @@ function Todd(game, spritesheet) {
     this.animation = new Animation(spritesheet, 401, 137, 5, 0.05, 60, true, 2);
     this.speed = 350;
     this.ctx = game.ctx;
-    Entity.call(this, game, 0, 250);
+    Entity.call(this, game, 500, 250);
 }
 
 Todd.prototype = new Entity();
 Todd.prototype.constructor = Todd;
 
 Todd.prototype.update = function () {
-    //this.x += this.game.clockTick * this.speed;
-    //if (this.x > 800) this.x = -230;
+	if (this.animation.elapsedTime > this.animation.totalTime * (20 / 60) && this.animation.elapsedTime < this.animation.totalTime * (50 / 60))
+    this.x -= this.game.clockTick * this.speed;
+    if (this.x < -800) this.x = 800;
     Entity.prototype.update.call(this);
 }
 
