@@ -137,7 +137,7 @@ AM.downloadAll(function () {
     gameEngine.start();
 
     gameEngine.addEntity(new Background(gameEngine, AM.getAsset("./img/background.jpg")));  
-    gameEngine.addEntity(new Todd(gameEngine, AM.getAsset("./img/Todd.png")));
+    gameEngine.addEntity(new Todd(gameEngine, AM.getAsset("./img/todd.png")));
 	gameEngine.addEntity(new ScottPilgrim(gameEngine, AM.getAsset("./img/scottpilgrim.png")));
     //gameEngine.addEntity(new Guy(gameEngine, AM.getAsset("./img/guy.jpg")));
 
