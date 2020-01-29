@@ -57,6 +57,28 @@ Background.prototype.draw = function () {
 Background.prototype.update = function () {
 };
 
+// inheritance 
+function Todd(game, spritesheet) {
+    this.animation = new Animation(spritesheet, 401, 137, 5, 0.05, 60, true, 2);
+    this.speed = 350;
+    this.ctx = game.ctx;
+    Entity.call(this, game, 0, 250);
+}
+
+Todd.prototype = new Entity();
+Todd.prototype.constructor = Todd;
+
+Todd.prototype.update = function () {
+    //this.x += this.game.clockTick * this.speed;
+    //if (this.x > 800) this.x = -230;
+    Entity.prototype.update.call(this);
+}
+
+Todd.prototype.draw = function () {
+    this.animation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+    Entity.prototype.draw.call(this);
+}
+
 function ScottPilgrim(game, spritesheet) {
     this.runRight = new Animation(spritesheet, 108, 140, 8, 0.1, 8, true, 2);
 	this.runLeft = new Animation(spritesheet, 108, 140, 8, 0.1, 8, true, 2)
@@ -69,6 +91,7 @@ function ScottPilgrim(game, spritesheet) {
 
 ScottPilgrim.prototype.draw = function () {
     this.runRight.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
+	this.runLeft.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
 }
 
 ScottPilgrim.prototype.update = function () {
@@ -76,29 +99,6 @@ ScottPilgrim.prototype.update = function () {
         this.x += this.game.clockTick * this.speed;
     if (this.x > 800) 
 		this.x = -230;//resets animation to left side
-}
-
-
-// inheritance 
-function Cheetah(game, spritesheet) {
-    this.animation = new Animation(spritesheet, 128, 64, 2, 0.05, 8, true, 0.5);
-    this.speed = 350;
-    this.ctx = game.ctx;
-    Entity.call(this, game, 0, 250);
-}
-
-Cheetah.prototype = new Entity();
-Cheetah.prototype.constructor = Cheetah;
-
-Cheetah.prototype.update = function () {
-    this.x += this.game.clockTick * this.speed;
-    if (this.x > 800) this.x = -230;
-    Entity.prototype.update.call(this);
-}
-
-Cheetah.prototype.draw = function () {
-    this.animation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
-    Entity.prototype.draw.call(this);
 }
 
 // inheritance 
@@ -124,7 +124,7 @@ Guy.prototype.draw = function () {
 }
 
 
-AM.queueDownload("./img/RobotUnicorn.png");
+AM.queueDownload("./img/Todd.png");
 AM.queueDownload("./img/guy.jpg");
 AM.queueDownload("./img/scottpilgrim.png");
 AM.queueDownload("./img/runningcat.png");
@@ -138,9 +138,9 @@ AM.downloadAll(function () {
     gameEngine.init(ctx);
     gameEngine.start();
 
-    gameEngine.addEntity(new Background(gameEngine, AM.getAsset("./img/background.jpg")));
-    gameEngine.addEntity(new ScottPilgrim(gameEngine, AM.getAsset("./img/scottpilgrim.png")));
-    //gameEngine.addEntity(new Cheetah(gameEngine, AM.getAsset("./img/runningcat.png")));
+    gameEngine.addEntity(new Background(gameEngine, AM.getAsset("./img/background.jpg")));  
+    gameEngine.addEntity(new Todd(gameEngine, AM.getAsset("./img/Todd.png")));
+	gameEngine.addEntity(new ScottPilgrim(gameEngine, AM.getAsset("./img/scottpilgrim.png")));
     //gameEngine.addEntity(new Guy(gameEngine, AM.getAsset("./img/guy.jpg")));
 
     console.log("All Done!");
