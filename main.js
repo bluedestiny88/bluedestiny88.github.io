@@ -62,7 +62,7 @@ function Todd(game, spritesheet) {
     this.animation = new Animation(spritesheet, 401, 137, 5, 0.05, 60, true, 2);
     this.speed = 350;
     this.ctx = game.ctx;
-    Entity.call(this, game, 500, 250);
+    Entity.call(this, game, 300, 250);
 }
 
 Todd.prototype = new Entity();
