@@ -57,7 +57,6 @@ Background.prototype.draw = function () {
 Background.prototype.update = function () {
 };
 
-// inheritance 
 function Todd(game, spritesheet) {
     this.animation = new Animation(spritesheet, 401, 137, 5, 0.05, 60, true, 2);
     this.speed = 350;
@@ -102,27 +101,6 @@ ScottPilgrim.prototype.update = function () {
 		this.x = -230;//resets animation to left side
 }
 
-// inheritance 
-function Guy(game, spritesheet) {
-    this.animation = new Animation(spritesheet, 154, 215, 4, 0.15, 8, true, 0.5);
-    this.speed = 100;
-    this.ctx = game.ctx;
-    Entity.call(this, game, 0, 450);
-}
-
-Guy.prototype = new Entity();
-Guy.prototype.constructor = Guy;
-
-Guy.prototype.update = function () {
-    this.x += this.game.clockTick * this.speed;
-    if (this.x > 800) this.x = -230;
-    Entity.prototype.update.call(this);
-}
-
-Guy.prototype.draw = function () {
-    this.animation.drawFrame(this.game.clockTick, this.ctx, this.x, this.y);
-    Entity.prototype.draw.call(this);
-}
 
 
 AM.queueDownload("./img/todd.png");
@@ -140,7 +118,6 @@ AM.downloadAll(function () {
     gameEngine.addEntity(new Background(gameEngine, AM.getAsset("./img/background.jpg")));  
     gameEngine.addEntity(new Todd(gameEngine, AM.getAsset("./img/todd.png")));
 	gameEngine.addEntity(new ScottPilgrim(gameEngine, AM.getAsset("./img/scottpilgrim.png")));
-    //gameEngine.addEntity(new Guy(gameEngine, AM.getAsset("./img/guy.jpg")));
 
     console.log("All Done!");
 });
