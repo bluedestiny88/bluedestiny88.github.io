@@ -11,7 +11,7 @@ function Circle(game) {
     this.player = 1;
     this.radius = 20;
     this.visualRadius = 500;
-    this.colors = ["Yellow", "Red", "Blue", "Green"];
+    this.colors = ["Yellow", "Red", "Blue", "Green", "Orange"];
     this.setHealthy();
 	this.infectionTimer = 500;
     Entity.call(this, game, this.radius + Math.random() * (800 - this.radius * 2), this.radius + Math.random() * (800 - this.radius * 2));
@@ -32,6 +32,7 @@ Circle.prototype.constructor = Circle;
 Circle.prototype.setSick = function () {
     this.sick = true;
 	this.infectious = false;
+	this.doctor = false;
     this.color = 0;
     this.visualRadius = 200;
 };
@@ -39,6 +40,7 @@ Circle.prototype.setSick = function () {
 	//	Is now infectious and can infect others
 Circle.prototype.setInfectious = function ()	{
 	this.infectious = true;
+	this.doctor = false;
 	this.color = 1;
 	this.visualRadius = 500;
 };
@@ -47,9 +49,11 @@ Circle.prototype.setInfectious = function ()	{
 Circle.prototype.setHealthy = function () {
 	this.sick = false;
 	this.infectious = false;
+	this.doctor = false;
     this.color = 3;
     this.visualRadius = 200;
 };
+
 
 
 
@@ -84,7 +88,8 @@ Circle.prototype.update = function () {
 					this.setInfectious();
 				}	else{
 					this.infectionTimer -= 1;
-			}}
+			}
+		}
 
     if (this.collideLeft() || this.collideRight()) {
         this.velocity.x = -this.velocity.x * friction;
@@ -126,6 +131,13 @@ Circle.prototype.update = function () {
             ent.x += ent.velocity.x * this.game.clockTick;
             ent.y += ent.velocity.y * this.game.clockTick;
             
+			if (this.doctor && ent.sick)	{
+				ent.setHealthy();
+			}
+			else if (this.sick && ent.doctor)	{
+				this.setHealthy();
+			}
+			
 			if (this.infectious) {
                 ent.setSick();
             }
