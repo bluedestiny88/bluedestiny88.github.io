@@ -9,8 +9,12 @@
     <script type="text/javascript" src="./main.js"></script>
 </head>
 <body>
-    <div>Right click and "Inspect Element".  Select the Console Tab to see the debugger output.</div>
+    <div>Infection Simulation</div>
 
     <canvas id="gameWorld" width="800" height="800" style="border: 1px solid white; background: black"></canvas>
+<p style="color: black">The following simulation showcases a type of simulation with a incubation period, i.e., a period of time in which a sick person does not infect others but shortly will be. </p>
+<p style="color: black">GREEN is healthy, but can become infected if touched by a red circle.</p>
+ <p style="color: black">YELLOW is sick, meaning they've been infected but they are not infectious yet. 500 ticks of the game clock needs to occur from the point of being infected before they become infectious.</p> 
+ <p style="color: black">RED means they are infectious and can make other circles sick.</p>
 </body>
 </html>

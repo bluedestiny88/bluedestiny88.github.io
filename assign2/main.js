@@ -11,8 +11,9 @@ function Circle(game) {
     this.player = 1;
     this.radius = 20;
     this.visualRadius = 500;
-    this.colors = ["Red", "Green", "Blue", "White"];
-    this.setNotIt();
+    this.colors = ["Yellow", "Red", "Blue", "Green"];
+    this.setHealthy();
+	this.infectionTimer = 500;
     Entity.call(this, game, this.radius + Math.random() * (800 - this.radius * 2), this.radius + Math.random() * (800 - this.radius * 2));
 
     this.velocity = { x: Math.random() * 1000, y: Math.random() * 1000 };
@@ -27,17 +28,30 @@ function Circle(game) {
 Circle.prototype = new Entity();
 Circle.prototype.constructor = Circle;
 
-Circle.prototype.setIt = function () {
-    this.it = true;
+	//	Has caught the virus, but not yet infectious
+Circle.prototype.setSick = function () {
+    this.sick = true;
+	this.infectious = false;
     this.color = 0;
-    this.visualRadius = 500;
+    this.visualRadius = 200;
 };
 
-Circle.prototype.setNotIt = function () {
-    this.it = false;
+	//	Is now infectious and can infect others
+Circle.prototype.setInfectious = function ()	{
+	this.infectious = true;
+	this.color = 1;
+	this.visualRadius = 500;
+};
+	
+	//	is healthy but susceptable to infection
+Circle.prototype.setHealthy = function () {
+	this.sick = false;
+	this.infectious = false;
     this.color = 3;
     this.visualRadius = 200;
 };
+
+
 
 Circle.prototype.collide = function (other) {
     return distance(this, other) < this.radius + other.radius;
@@ -65,6 +79,12 @@ Circle.prototype.update = function () {
 
     this.x += this.velocity.x * this.game.clockTick;
     this.y += this.velocity.y * this.game.clockTick;
+	if (this.sick)	{
+				if (this.infectionTimer < 1)	{
+					this.setInfectious();
+				}	else{
+					this.infectionTimer -= 1;
+			}}
 
     if (this.collideLeft() || this.collideRight()) {
         this.velocity.x = -this.velocity.x * friction;
@@ -105,19 +125,18 @@ Circle.prototype.update = function () {
             this.y += this.velocity.y * this.game.clockTick;
             ent.x += ent.velocity.x * this.game.clockTick;
             ent.y += ent.velocity.y * this.game.clockTick;
-            if (this.it) {
-                //this.setNotIt();
-                ent.setIt();
+            
+			if (this.infectious) {
+                ent.setSick();
             }
-            else if (ent.it) {
-                this.setIt();
-                //ent.setNotIt();
+            else if (ent.infectious) {
+                this.setSick();
             }
         }
 
         if (ent != this && this.collide({ x: ent.x, y: ent.y, radius: this.visualRadius })) {
             var dist = distance(this, ent);
-            if (this.it && dist > this.radius + ent.radius + 10) {
+            if (this.infectious && dist > this.radius + ent.radius + 10) {
                 var difX = (ent.x - this.x)/dist;
                 var difY = (ent.y - this.y)/dist;
                 this.velocity.x += difX * acceleration / (dist*dist);
@@ -129,7 +148,7 @@ Circle.prototype.update = function () {
                     this.velocity.y *= ratio;
                 }
             }
-            if (ent.it && dist > this.radius + ent.radius) {
+            if (ent.infectious && dist > this.radius + ent.radius) {
                 var difX = (ent.x - this.x) / dist;
                 var difY = (ent.y - this.y) / dist;
                 this.velocity.x -= difX * acceleration / (dist * dist);
@@ -179,9 +198,9 @@ ASSET_MANAGER.downloadAll(function () {
 
     var gameEngine = new GameEngine();
     var circle = new Circle(gameEngine);
-    circle.setIt();
+    circle.setSick();
     gameEngine.addEntity(circle);
-    for (var i = 0; i < 12; i++) {
+    for (var i = 0; i < 25; i++) {
         circle = new Circle(gameEngine);
         gameEngine.addEntity(circle);
     }
