@@ -11,7 +11,7 @@ function Circle(game) {
     this.player = 1;
     this.radius = 20;
     this.visualRadius = 500;
-    this.colors = ["Yellow", "Red", "Blue", "Green", "Orange"];
+    this.colors = ["Yellow", "Red", "Blue", "Green"];
     this.setHealthy();
 	this.infectionTimer = 500;
     Entity.call(this, game, this.radius + Math.random() * (800 - this.radius * 2), this.radius + Math.random() * (800 - this.radius * 2));
