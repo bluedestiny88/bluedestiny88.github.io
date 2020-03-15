@@ -1,5 +1,7 @@
+window.onload = function ()	{
 
-// GameBoard code below
+var socket = io.connect("http://24.16.255.56:8888");
+var canvas = document.getElementById('gameWorld');
 
 function distance(a, b) {
     var dx = a.x - b.x;
@@ -207,15 +209,52 @@ ASSET_MANAGER.downloadAll(function () {
     var canvas = document.getElementById('gameWorld');
     var ctx = canvas.getContext('2d');
 
-
+	const saveState = [];
     var gameEngine = new GameEngine();
     var circle = new Circle(gameEngine);
     circle.setSick();
     gameEngine.addEntity(circle);
+	saveState[0] = circle;
     for (var i = 0; i < 25; i++) {
         circle = new Circle(gameEngine);
         gameEngine.addEntity(circle);
+		saveState[i + 1] = circle;
     }
+
+		
+	//	load socket code
+	socket.on("load", function (data)	{
+		console.log(data);
+		console.log(data.data);
+		
+		for (var i = 0; i < 26; i++)	{
+			saveState[i] = data.data[i];
+		}
+	});
+	
+	var text = document.getElementById("text");
+	var saveButton = document.getElementById("save");
+	var loadButton = document.getElementById("load");
+	
+	saveButton.onclick = function ()	{
+		console.log("saving");
+		var saveArr = [];
+		for (var i = 0; i < 26; i++)	{
+			saveArr[i] = [];
+		}
+	
+		socket.emit("save", {studentname: "Patrick Lauer", statename: "Executing", data: saveArr });
+		console.log("saved");
+	};
+	
+	loadButton.onclick = function ()	{
+		console.log("load");
+		socket.emit("load", {studentname: "Patrick Lauer", statename: "Executing" });
+	};
+
+
     gameEngine.init(ctx);
     gameEngine.start();
 });
+
+}
