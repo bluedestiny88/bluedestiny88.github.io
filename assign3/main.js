@@ -56,7 +56,13 @@ Circle.prototype.setHealthy = function () {
     this.visualRadius = 200;
 };
 
-
+Circle.prototype.setValues = function (infectionTimer, velx, vely, posX, posY) {
+	this.infectionTimer = infectionTimer;
+	this.velocity.x = velx;
+	this.velocity.y = vely;
+	this.x = posX;
+	this.y = posY;
+};
 
 
 Circle.prototype.collide = function (other) {
@@ -191,9 +197,14 @@ Circle.prototype.draw = function (ctx) {
 
 };
 
-function TempCircle(isSick, isInfected)	{
+function TempCircle(isSick, isInfected, infectionTimer, velx, vely, xPos, yPos)	{
 	this.isSick = isSick;
 	this.isInfected = isInfected;
+	this.infectionTimer = infectionTimer;
+	this.velx = velx;
+	this.vely = vely;
+	this.x = xPos;
+	this.y = yPos;
 }
 	
 	TempCircle.prototype = new Entity();
@@ -237,24 +248,29 @@ ASSET_MANAGER.downloadAll(function () {
 		console.log(data);
 		console.log(data.data);
 		
+		
+		
+		for (var i = 0; i < 26; i++)	{
+			saveState[i].removeFromWorld = true;
+		}
 		var tempArr = [];
 		for (var i = 0; i < 26; i++)	{
 			tempArr[i] = data.data[i];
 		}
+		
 		for (var i = 0; i < 26; i++)	{
-			if (teampArr[i].isInfectious())	{
-				var circle = new Circle(gameEngine);
+			var circle = new Circle(gameEngine);
+			circle.setValues(tempArr[i].infectionTimer, tempArr[i].velx, tempArr[i].vely, tempArr[i].x, tempArr[i].y);
+			if (tempArr[i].isInfected)	{				
 				circle.setInfectious();
 				saveState[i] = circle;
 				gameEngine.addEntity(saveState[i]);
 			}
-			 else if (teampArr[i].isSick())	{
-				var circle = new Circle(gameEngine);
+			 else if (!tempArr[i].isInfected && tempArr[i].isSick)	{
 				circle.setSick();
 				saveState[i] = circle;
 				gameEngine.addEntity(saveState[i]);
 			 }	else	{
-				 var circle = new Circle(gameEngine);
 				saveState[i] = circle;
 				gameEngine.addEntity(saveState[i]);
 			 }
@@ -271,17 +287,19 @@ ASSET_MANAGER.downloadAll(function () {
 		console.log("saving");
 		var saveArr = [];
 		for (var i = 0; i < 26; i++)	{
-			saveArr[i] = new TempCircle(saveState[i].sick, saveState[i].infectious);
+			console.log(saveState[i].infectionTimer);
+			saveArr[i] = new TempCircle(saveState[i].sick, saveState[i].infectious, saveState[i].infectionTimer, saveState[i].velocity.x, saveState[i].velocity.x, saveState[i].x, saveState[i].y);
 		}
 		console.log(saveArr);
 	
-		socket.emit("save", {studentname: "Patrick Lauer", statename: "Executing", data: saveArr });
+		socket.emit("save", {studentname: "Patrick Lauer", statename: "Running", data: saveArr });
 		console.log("saved");
 	};
 	
 	loadButton.onclick = function ()	{
 		console.log("load");
-		socket.emit("load", {studentname: "Patrick Lauer", statename: "Executing" });
+		socket.emit("load", {studentname: "Patrick Lauer", statename: "Running" });
+		console.log("load complete");
 	};
 
 
