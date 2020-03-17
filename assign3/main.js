@@ -191,6 +191,15 @@ Circle.prototype.draw = function (ctx) {
 
 };
 
+function TempCircle(isSick, isInfected)	{
+	this.isSick = isSick;
+	this.isInfected = isInfected;
+}
+	
+	TempCircle.prototype = new Entity();
+    TempCircle.prototype.constructor = TempCircle;
+	
+
 
 
 // the "main" code begins here
@@ -209,7 +218,7 @@ ASSET_MANAGER.downloadAll(function () {
     var canvas = document.getElementById('gameWorld');
     var ctx = canvas.getContext('2d');
 
-	const saveState = [];
+	var saveState = [];
     var gameEngine = new GameEngine();
     var circle = new Circle(gameEngine);
     circle.setSick();
@@ -217,8 +226,9 @@ ASSET_MANAGER.downloadAll(function () {
 	saveState[0] = circle;
     for (var i = 0; i < 25; i++) {
         circle = new Circle(gameEngine);
-        gameEngine.addEntity(circle);
 		saveState[i + 1] = circle;
+        gameEngine.addEntity(saveState[i + 1]);
+
     }
 
 		
@@ -227,8 +237,29 @@ ASSET_MANAGER.downloadAll(function () {
 		console.log(data);
 		console.log(data.data);
 		
+		var tempArr = [];
 		for (var i = 0; i < 26; i++)	{
-			saveState[i] = data.data[i];
+			tempArr[i] = data.data[i];
+		}
+		for (var i = 0; i < 26; i++)	{
+			if (teampArr[i].isInfectious())	{
+				var circle = new Circle(gameEngine);
+				circle.setInfectious();
+				saveState[i] = circle;
+				gameEngine.addEntity(saveState[i]);
+			}
+			 else if (teampArr[i].isSick())	{
+				var circle = new Circle(gameEngine);
+				circle.setSick();
+				saveState[i] = circle;
+				gameEngine.addEntity(saveState[i]);
+			 }	else	{
+				 var circle = new Circle(gameEngine);
+				saveState[i] = circle;
+				gameEngine.addEntity(saveState[i]);
+			 }
+				 
+				 
 		}
 	});
 	
@@ -240,8 +271,9 @@ ASSET_MANAGER.downloadAll(function () {
 		console.log("saving");
 		var saveArr = [];
 		for (var i = 0; i < 26; i++)	{
-			saveArr[i] = [];
+			saveArr[i] = new TempCircle(saveState[i].sick, saveState[i].infectious);
 		}
+		console.log(saveArr);
 	
 		socket.emit("save", {studentname: "Patrick Lauer", statename: "Executing", data: saveArr });
 		console.log("saved");
